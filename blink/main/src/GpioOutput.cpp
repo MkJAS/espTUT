@@ -50,16 +50,27 @@ esp_err_t GpioOutput::set(const bool state)
 
     ESP_LOGI(LOG_TAG, "%i",state);
 
-    return gpio_set_level(m_pin,state);
+    if(state)
+    {
+        led_strip_set_pixel(m_led_strip, 0, m_RED, m_GREEN, m_BLUE);
+        /* Refresh the strip to send data */
+        return led_strip_refresh(m_led_strip);
+    }
+    else
+    {
+        return led_strip_clear(m_led_strip);
+    }
+
+    
 }
 
 
 esp_err_t GpioOutput::toggle()
 {
     /* If the addressable LED is enabled */
-    if (m_state) 
+    if (!m_state) 
     {
-        m_state = false;
+        m_state = true;
         /* Set the LED pixel using RGB from 0 (0%) to 255 (100%) for each color */
         led_strip_set_pixel(m_led_strip, 0, m_RED, m_GREEN, m_BLUE);
         /* Refresh the strip to send data */
@@ -67,7 +78,7 @@ esp_err_t GpioOutput::toggle()
     } 
     else 
     {
-        m_state = true;
+        m_state = false;
         /* Set all LED off to clear all pixels */
         return led_strip_clear(m_led_strip);
     }
