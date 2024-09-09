@@ -13,7 +13,7 @@ public:
 
     void acceptClient();
 
-    void write(char buff, int buffsize);
+    void write(const char* buff, int buffsize);
 
     std::string readSocket();
 

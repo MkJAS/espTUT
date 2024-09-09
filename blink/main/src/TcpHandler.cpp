@@ -94,13 +94,13 @@ void TcpHandler::acceptClient()
 
 
 
-void TcpHandler::write(char buff, int buffsize)
+void TcpHandler::write(const char* buff, int buffsize)
 {
     int result;
 
-    ESP_LOGI(TAG, "Sent: %d", buff);
+    ESP_LOGI(TAG, "Sent: %s", buff);
 
-    result = send(m_clientSocket, &buff, buffsize, 0);
+    result = send(m_clientSocket, buff, buffsize, 0);
 
     if (result < 0)
     {
