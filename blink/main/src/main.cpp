@@ -65,6 +65,29 @@ extern "C" void app_main(void)
             //led.set(false);
             led.toggle();
         }
+        else if (readBuff.find("COLOUR") != std::string::npos)
+        {
+            //COLOR:R,G,B
+            int index = readBuff.find("COLOUR");
+            index = index + 7;
+            
+
+            std::string colourValues(readBuff,index);
+
+            int redIndex = colourValues.find(",");
+            int redValue = std::stoi(colourValues.substr(0,redIndex));
+            ESP_LOGI(LOG_TAG, "red value: %i", redValue);
+
+            int greenIndex = colourValues.find(",",redIndex+1);
+            //ESP_LOGI(LOG_TAG, "green index: %i", greenIndex);
+            int greenValue = std::stoi(colourValues.substr(redIndex+1,greenIndex));
+            ESP_LOGI(LOG_TAG, "green value: %i", greenValue);
+
+            ESP_LOGI(LOG_TAG, "string: %s", colourValues.substr(greenIndex+1).c_str());
+            int blueValue = std::stoi(colourValues.substr(greenIndex+1));
+            ESP_LOGI(LOG_TAG, "blue value: %i", blueValue);
+            
+        }
         else
         {
             ESP_LOGI(LOG_TAG, "Bad buffer read");
