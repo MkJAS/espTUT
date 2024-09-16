@@ -5,6 +5,8 @@
 #define LOG_TAG "MAIN"
 #include "nvs_flash.h"
 
+#include <algorithm>
+#include <cctype> 
 
 #include "WifiHandler.h"
 #include "TcpHandler.h"
@@ -52,27 +54,34 @@ extern "C" void app_main(void)
     {
         std::string readBuff = tcpCon.readSocket();
 
-        ESP_LOGI(LOG_TAG, "readBuff came out as: %s", readBuff.c_str());
-        ESP_LOGI(LOG_TAG, "readBuff size: %i", readBuff.length());
+        std::string loweredBuff = readBuff;
 
-        if (readBuff.find("ON") != std::string::npos)
+        std::transform(loweredBuff.begin(), loweredBuff.end(), loweredBuff.begin(),
+                   [](unsigned char c){ return std::tolower(c); });
+
+        ESP_LOGI(LOG_TAG, "readBuff came out as: %s", loweredBuff.c_str());
+        ESP_LOGI(LOG_TAG, "readBuff size: %i", loweredBuff.length());
+
+
+
+        if (loweredBuff.find("on") != std::string::npos)
         {
             led.set(true);
         }
-        else if (readBuff.find("OFF") != std::string::npos)
+        else if (loweredBuff.find("off") != std::string::npos)
         {
             ESP_LOGI(LOG_TAG, "Turning off LED");
             //led.set(false);
-            led.toggle();
+            led.set(false);
         }
-        else if (readBuff.find("COLOUR") != std::string::npos)
+        else if (loweredBuff.find("colour") != std::string::npos)
         {
             //COLOR:R,G,B
-            int index = readBuff.find("COLOUR");
+            int index = loweredBuff.find("colour");
             index = index + 7;
             
 
-            std::string colourValues(readBuff,index);
+            std::string colourValues(loweredBuff,index);
 
             int redIndex = colourValues.find(",");
             int redValue = std::stoi(colourValues.substr(0,redIndex));
@@ -86,6 +95,18 @@ extern "C" void app_main(void)
             ESP_LOGI(LOG_TAG, "string: %s", colourValues.substr(greenIndex+1).c_str());
             int blueValue = std::stoi(colourValues.substr(greenIndex+1));
             ESP_LOGI(LOG_TAG, "blue value: %i", blueValue);
+
+            led.setColour(redValue,greenValue,blueValue);
+
+            if (led.getState())
+            {
+                led.toggle();
+                led.toggle();
+            }
+            else
+            {
+                led.toggle();
+            }
             
         }
         else
