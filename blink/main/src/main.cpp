@@ -48,6 +48,7 @@ extern "C" void app_main(void)
     led.initalise();
 
     char buff[] = "Hello Client";
+    led.set(false);
     tcpCon.write(buff, sizeof(buff));
 
     while (true)
