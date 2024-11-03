@@ -17,9 +17,6 @@ extern "C" void app_main(void)
 {
     ESP_LOGI(LOG_TAG, "Hello");
 
-
-
-
     WifiHandler wifi;
     TcpHandler tcpCon;
 
@@ -116,18 +113,6 @@ extern "C" void app_main(void)
         }
     }
     
-
-
-
-    while(true)
-    {
-        led.toggle();
-        ESP_LOGD(LOG_TAG, "TOGGLE");
-        vTaskDelay(400);
-        ESP_LOGD(LOG_TAG, "TOGGLE");
-        led.toggle();
-        vTaskDelay(400);
-    }
 
 
 }

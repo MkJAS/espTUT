@@ -2,7 +2,8 @@ set(SOURCES ./src/main.cpp
             ./src/GpioBase.cpp
             ./src/GpioOutput.cpp
             ./src/WifiHandler.cpp
-            ./src/TcpHandler.cpp)
+            ./src/TcpHandler.cpp
+            ./src/Mic.cpp)
 
 idf_component_register(SRCS ${SOURCES}
                         INCLUDE_DIRS . inc
